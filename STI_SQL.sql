@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS 'user' (
-    'id_user' INT(11) UNIQUE NOT NULL,
+    'id_user' INTEGER UNIQUE,
     'username' VARCHAR(45) UNIQUE NOT NULL,
     'password' VARCHAR(45) NOT NULL,
     'role' INT(11) NOT NULL DEFAULT 0,
