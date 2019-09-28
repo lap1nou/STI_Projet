@@ -16,10 +16,10 @@
         }
     }
 
-    function getUsernameById($id){
+    function getUsernameById($userId){
         $file_db = DB_connect();
 
-        $result = $file_db->query("SELECT username FROM user WHERE id_user = \"" . $id . "\"");
+        $result = $file_db->query("SELECT username FROM user WHERE id_user = \"" . $userId . "\"");
         
         foreach($result as $row){
             return $row[0];
@@ -45,6 +45,40 @@
             $result = $file_db->exec("UPDATE user SET password = \"" . password_hash($newPassword, PASSWORD_DEFAULT) . "\" WHERE id_user = \"" . getIdByUsername($username) . "\"");
 
             return true;
+        }
+
+        return false;
+    }
+
+    function removeMessage($messageId){
+        $file_db = DB_connect();
+
+        $result = $file_db->exec("DELETE FROM message WHERE id_message = " . $messageId);
+    }
+
+    function isActive($userId){
+        $file_db = DB_connect();
+
+        $result = $file_db->query("SELECT enabled FROM user WHERE id_user = \"" . $userId . "\"");
+
+        foreach($result as $row){
+            if($row[0] == 1){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function isAdmin($userId){
+        $file_db = DB_connect();
+
+        $result = $file_db->query("SELECT role FROM user WHERE id_user = \"" . $userId . "\"");
+
+        foreach($result as $row){
+            if($row[0] == 1){
+                return true;
+            }
         }
 
         return false;

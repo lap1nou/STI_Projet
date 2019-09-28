@@ -71,11 +71,20 @@
             <span>Change password</span></a>
         </li>
 
+        <?php if(isAdmin(getIdByUsername($_SESSION['username']))) {?>
+          <li class="nav-item">
+          <a class="nav-link" href="index.php?page=admin.php">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Admin panel</span></a>
+          </li>
+        <?php } ?>
+
         <li class="nav-item">
           <a class="nav-link" href="index.php?page=disconnect.php">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fas fa-fw fa-times"></i>
             <span>Disconnect</span></a>
         </li>
+
       <?php } else { ?>
         <li class="nav-item">
           <a class="nav-link" href="index.php?page=login.php">
@@ -89,6 +98,7 @@
             <span>Register</span></a>
         </li>
       <?php } ?>
+
     </ul>
     <!-- End of Menu -->
 
