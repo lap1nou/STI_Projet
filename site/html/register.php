@@ -19,8 +19,8 @@
     $password = $_POST['password'];
     $password_confirm = $_POST['password_confirm'];
 
-    if(isset($username) && isset($password) && isset($password_confirm) && !empty($password_confirm) && !empty($username) && !empty($password)){
+    if(isValid($username) && isValid($password) && isValid($password_confirm)){
         // Verifying if username is valid
-        $result = $file_db->exec("INSERT INTO \"user\" VALUES (NULL, \"" . $username . "\",\"" . $password . "\", 0, 1);");
+        $result = $file_db->exec("INSERT INTO \"user\" VALUES (NULL, \"" . $username . "\",\"" . password_hash($password, PASSWORD_DEFAULT) . "\", 0, 1);");
     }
 ?>
