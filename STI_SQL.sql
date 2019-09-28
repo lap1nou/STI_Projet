@@ -2,17 +2,19 @@ CREATE TABLE IF NOT EXISTS 'user' (
     'id_user' INTEGER UNIQUE,
     'username' VARCHAR(45) UNIQUE NOT NULL,
     'password' VARCHAR(255) NOT NULL,
-    'role' INT(11) NOT NULL DEFAULT 0,
+    'role' INTEGER NOT NULL DEFAULT 0,
     'enabled' BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY ('id_user'));
 
 CREATE TABLE IF NOT EXISTS 'message' (
-    'id_message' INT(11) UNIQUE NOT NULL,
-    'id_sender' INT(11) NOT NULL,
-    'id_receiver' INT(11) NOT NULL,
+    'id_message' INTEGER UNIQUE,
+    'id_sender' INTEGER NOT NULL,
+    'id_receiver' INTEGER NOT NULL,
     'subject' VARCHAR NOT NULL,
     'text' VARCHAR NOT NULL,
-    'date' DATE NOT NULL,
+    'date' DATETIME DEFAULT (datetime('now','localtime')),
     FOREIGN KEY ('id_sender') REFERENCES 'user' ('id_user'),
     FOREIGN KEY ('id_receiver') REFERENCES 'user' ('id_user'),
     PRIMARY KEY ('id_message'));
+
+/* Source: https://stackoverflow.com/questions/381371/sqlite-current-timestamp-is-in-gmt-not-the-timezone-of-the-machine */
