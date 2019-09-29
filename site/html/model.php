@@ -6,6 +6,12 @@
         return $file_db;
     }
 
+    function getUserById($userId){
+        $file_db = DB_connect();
+
+        return $file_db->query("SELECT * FROM user WHERE id_user = " . $userId);
+    }
+
     function getIdByUsername($username){
         $file_db = DB_connect();
 
@@ -34,6 +40,28 @@
         foreach($result as $row){
             return $row[0];
         }
+    }
+
+    function createUser($username, $password, $role){
+        $file_db = DB_connect();
+
+        $result = $file_db->exec("INSERT INTO \"user\" VALUES (NULL, \"" . $username . "\",\"" . password_hash($password, PASSWORD_DEFAULT) . "\"," . $role . ", 1);");
+    }
+
+    function modifyUser($username, $newPassword, $role, $active){
+        $file_db = DB_connect();
+
+        if(isValid($newPassword)){
+            $result = $file_db->exec("UPDATE user SET username = \"" . $username . "\", password = \"" . password_hash($newPassword, PASSWORD_DEFAULT) . "\", role = " . $role . ", enabled = " . $active . " WHERE id_user = \"" . getIdByUsername($username) . "\"");
+        }else{
+            $result = $file_db->exec("UPDATE user SET username = \"" . $username . "\", role = " . $role . ", enabled = " . $active . " WHERE id_user = \"" . getIdByUsername($username) . "\"");
+        }
+    }
+
+    function deleteUser($userId){
+        $file_db = DB_connect();
+
+        $result = $file_db->exec("DELETE FROM user WHERE id_user = " . $userId);
     }
 
     function changePassword($oldPassword, $newPassword, $username){

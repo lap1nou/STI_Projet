@@ -124,11 +124,9 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                  <div class="chart-area">
                     <?php 
                       include($_GET['page']);
                     ?>
-                  </div>
                 </div>
               </div>
             </div>
