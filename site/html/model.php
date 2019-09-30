@@ -48,13 +48,13 @@
         $result = $file_db->exec("INSERT INTO \"user\" VALUES (NULL, \"" . $username . "\",\"" . password_hash($password, PASSWORD_DEFAULT) . "\"," . $role . ", 1);");
     }
 
-    function modifyUser($username, $newPassword, $role, $active){
+    function modifyUser($userId, $username, $newPassword, $role, $active){
         $file_db = DB_connect();
 
         if(isValid($newPassword)){
-            $result = $file_db->exec("UPDATE user SET username = \"" . $username . "\", password = \"" . password_hash($newPassword, PASSWORD_DEFAULT) . "\", role = " . $role . ", enabled = " . $active . " WHERE id_user = \"" . getIdByUsername($username) . "\"");
+            $result = $file_db->exec("UPDATE user SET username = \"" . $username . "\", password = \"" . password_hash($newPassword, PASSWORD_DEFAULT) . "\", role = " . $role . ", enabled = " . $active . " WHERE id_user = " . $userId);
         }else{
-            $result = $file_db->exec("UPDATE user SET username = \"" . $username . "\", role = " . $role . ", enabled = " . $active . " WHERE id_user = \"" . getIdByUsername($username) . "\"");
+            $result = $file_db->exec("UPDATE user SET username = \"" . $username . "\", role = " . $role . ", enabled = " . $active . " WHERE id_user = " . $userId);
         }
     }
 
@@ -76,6 +76,11 @@
         }
 
         return false;
+    }
+    function sendMessage($username, $receiver, $subject, $message){
+        $file_db = DB_connect();
+
+        $file_db->exec("INSERT INTO \"message\" (id_message, id_sender, id_receiver, subject, text) VALUES (NULL," . getIdByUsername($_SESSION['username']) . "," . getIdByUsername($_POST['receiver']) . ",\"" . $_POST['subject'] . "\",\"" . $_POST['message'] . "\")");
     }
 
     function removeMessage($messageId){

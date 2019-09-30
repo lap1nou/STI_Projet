@@ -26,6 +26,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
             <option value="1">Active</option>
         </select>
         <br>
+        <input type="hidden" value="<?php echo $_POST['userIdModify'] ?>" name="userIdModify">
         <input class="btn btn-success" type="submit" id="button_login" value="Modify">
     </form>
 </html>
@@ -37,11 +38,21 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
     $role = $_POST['role'];
     $active = $_POST['active'];
 
+    if(isValid($username)){
+        modifyUser($_POST['userIdModify'] ,$username, $password, $role, $active);
+        ?>
+            <br>
+            <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
+            <div class="alert alert-success" role="alert">
+                User has been modifed !
+            </div>
+        <?php
+    }
+
     if(isValid($_POST['userIdModify'])){
         $userInfo = getUserById($_POST['userIdModify']);
         foreach($userInfo as $row){
             ?>
-            
             <script>
                 document.getElementById("username").value = "<?php echo $row[1] ?>";
                 document.getElementById("role").value = "<?php echo $row[3] ?>";
@@ -49,10 +60,6 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
             </script>
             <?php
         }
-    }
-
-    if(isValid($username)){
-        modifyUser($username, $password, $role, $active);
     }
 ?>
 

@@ -3,9 +3,15 @@
         include_once("message.html");
 
         if(isValid($_POST['receiver']) && isValid($_POST['subject']) && isValid($_POST['message'])){
-            $file_db->exec("INSERT INTO \"message\" (id_message, id_sender, id_receiver, subject, text) VALUES (NULL," . getIdByUsername($_SESSION['username']) . "," . getIdByUsername($_POST['receiver']) . ",\"" . $_POST['subject'] . "\",\"" . $_POST['message'] . "\")");
+            sendMessage($_SESSION['username'], $_POST['receiver'], $_POST['subject'], $_POST['message']);
+            ?>
+                <br>
+                <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
+                <div class="alert alert-success" role="alert">
+                    Message has been sent !
+                </div>
+            <?php
         } else if(isValid($_POST['answerMessage'])){
-            var_dump($_POST);
         ?>
             <script>
                 document.getElementById("receiver").value = "<?php echo $_POST['receiverMessage'] ?>";

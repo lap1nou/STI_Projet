@@ -8,10 +8,24 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
     if(isValid($username) && isValid($password) && isValid($password_confirm)){
         // Verifying if username is valid
         createUser($username, $password, $role);
+        ?>
+            <br>
+            <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
+            <div class="alert alert-success" role="alert">
+                User has been created !
+            </div>
+        <?php
     }
 
     if(isValid($_POST['userIdRemove'])){
         deleteUser($_POST['userIdRemove']);
+        ?>
+        <br>
+        <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
+        <div class="alert alert-success" role="alert">
+            User has been deleted !
+        </div>
+    <?php
     }
 ?>
 

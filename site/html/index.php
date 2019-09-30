@@ -91,12 +91,6 @@
             <i class="fas fa-fw fa-key"></i>
             <span>Login</span></a>
         </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="index.php?page=register.php">
-            <i class="fas fa-fw fa-key"></i>
-            <span>Register</span></a>
-        </li>
       <?php } ?>
 
     </ul>
