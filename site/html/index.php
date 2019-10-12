@@ -114,12 +114,42 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <?php // Mettre un titre dynamique ?>
-                  <h6 class="m-0 font-weight-bold text-primary">Login</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">
+                    <?php 
+                    switch($_GET['page']){
+                      case 'login.php':
+                        echo "Login";
+                        break;
+                      case 'admin.php':
+                        echo "Admin";
+                        break;
+                      case 'message.php':
+                        echo "Messages";
+                        break;
+                      case 'modify.php':
+                        echo "Modify";
+                        break;
+                      case 'passwordChange.php':
+                        echo "Change password";
+                        break;
+                      case 'write.php':
+                        echo "Write message";
+                        break;
+                      default:
+                        echo "Login";
+                        break;
+                    }
+                    ?>
+                  </h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                     <?php 
+                    if(isValid($_GET['page'])){
                       include($_GET['page']);
+                    }else{
+                      include('login.php');
+                    }
                     ?>
                 </div>
               </div>
