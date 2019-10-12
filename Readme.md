@@ -17,11 +17,7 @@ Type 'sudo ./start.sh' to launch the starting script.
 
 ## Step 3 - Browsing project
 ```
-Go to  URL: http://${DOCKER_IP}:8080/
-
-To find the docker IP you can execute this command: 
-
-sudo docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' sti_project
+Go to  URL: http://localhost:8080/
 ```
 
 ## Step 4 - Accounts
