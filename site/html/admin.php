@@ -7,16 +7,25 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
 
     if(isValid($username) && isValid($password) && isValid($password_confirm)){
         // Verifying if username is valid
-        createUser($username, $password, $role);
-        ?>
-            <br>
-            <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
-            <div class="alert alert-success" role="alert">
-                User has been created !
-            </div>
-        <?php
+        if($password_confirm == $password){
+            createUser($username, $password, $role);
+            ?>
+                <br>
+                <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
+                <div class="alert alert-success" role="alert">
+                    User has been created !
+                </div>
+            <?php
+        }else{
+            ?>
+                <br>
+                <!-- Source: https://getbootstrap.com/docs/4.3/components/alerts/ -->
+                <div class="alert alert-danger" role="alert">
+                    User has not been created !
+                </div>
+            <?php
+        }
     }
-
     if(isValid($_POST['userIdRemove'])){
         deleteUser($_POST['userIdRemove']);
         ?>
