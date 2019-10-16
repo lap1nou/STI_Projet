@@ -7,7 +7,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
 
     if(isValid($username) && isValid($password) && isValid($password_confirm)){
         // Verifying if username is valid
-        if($password_confirm == $password){
+        if($password_confirm === $password){
             createUser($username, $password, $role);
             ?>
                 <br>
