@@ -10,8 +10,8 @@
 
         $stmt = $file_db->prepare("SELECT * FROM user WHERE username = :username");
         $stmt->bindValue(":username", $username);
-
-        $result = $stmt->execute();
+        $stmt->execute();
+        $result = $stmt->fetchAll();
 
         foreach($result as $row){
             $numRows++; 

@@ -12,7 +12,12 @@
         $stmt = $file_db->prepare("SELECT * FROM user WHERE id_user = :userId");
         $stmt->bindValue(":userId", $userId, SQLITE3_INTEGER);
 
-        return $stmt->execute();
+        $stmt->execute();
+
+        $result = $stmt->fetch();
+        $stmt->closeCursor();
+
+        return $result['id_user'];
     }
 
     function getIdByUsername($username){
@@ -20,11 +25,10 @@
 
         $stmt = $file_db->prepare("SELECT id_user FROM user WHERE username = :username");
         $stmt->bindValue(":username", $username);
-        $result = $stmt->execute();
+        $stmt->execute();
+        $result = $stmt->fetch();
 
-        foreach($result as $row){
-            return $row[0];
-        }
+        return $result['id_user'];
     }
 
     function getUsernameById($userId){
@@ -32,11 +36,11 @@
 
         $stmt = $file_db->prepare("SELECT username FROM user WHERE id_user = :userId");
         $stmt->bindValue(":userId", $userId);
-        $result = $stmt->execute();
+        $stmt->execute();
 
-        foreach($result as $row){
-            return $row[0];
-        }
+        $result = $stmt->fetch();
+
+        return $result['username'];
     }
 
     function getUsernamePassword($username){
@@ -44,28 +48,31 @@
 
         $stmt = $file_db->prepare("SELECT password FROM user WHERE username = :username");
         $stmt->bindValue(":username", $username);
-        $result = $stmt->execute();
+        $stmt->execute();
 
-        foreach($result as $row){
-            return $row[0];
-        }
+        $result = $stmt->fetch();
+        $stmt->closeCursor();
+
+        return $result["password"];
     }
 
     function createUser($username, $password, $role){
         $file_db = DB_connect();
 
-        $stmt = $file_db->prepare("INSERT INTO \"user\" VALUES (NULL, :username, :password, :role, 1");
+        $stmt = $file_db->prepare("INSERT INTO user VALUES (NULL, :username, :password, :role, 1)");
         $stmt->bindValue(":username", $username);
         $stmt->bindValue(":password",  password_hash($password, PASSWORD_DEFAULT));
         $stmt->bindValue(":role", $role);
         $stmt->execute();
+        $stmt->closeCursor();
     }
 
     function modifyUser($userId, $username, $newPassword, $role, $active){
         $file_db = DB_connect();
+        var_dump($newPassword);
 
-        if(isValid($newPassword)){
-            $stmt = $file_db->prepare("UPDATE user SET username = :username, password = :password, role = :role, enabled = :active WHERE id_user = :userId)");
+        if(isValid($newPassword) && $newPassword !== ''){
+            $stmt = $file_db->prepare("UPDATE `user` SET username = :username, password = :password, role = :role, enabled = :active WHERE id_user = :userId");
             $stmt->bindValue(":username", $username);
             $stmt->bindValue(":password",  password_hash($newPassword, PASSWORD_DEFAULT));
             $stmt->bindValue(":role", $role);
@@ -73,7 +80,7 @@
             $stmt->bindValue(":userId", $userId);
             $stmt->execute();
         }else{
-            $stmt = $file_db->prepare("UPDATE user SET username = :username, role = :role, enabled = :active WHERE id_user = :userId)");
+            $stmt = $file_db->prepare("UPDATE `user` SET username = :username, role = :role, enabled = :active WHERE id_user = :userId");
             $stmt->bindValue(":username", $username);
             $stmt->bindValue(":role", $role);
             $stmt->bindValue(":active", $active);
@@ -88,6 +95,7 @@
         $stmt = $file_db->prepare("DELETE FROM user WHERE id_user = :userId");
         $stmt->bindValue(":userId", $userId);
         $stmt->execute();
+        $stmt->closeCursor();
     }
 
     function changePassword($oldPassword, $newPassword, $username){
@@ -100,6 +108,7 @@
             $stmt->bindValue(":password", password_hash($newPassword, PASSWORD_DEFAULT));
             $stmt->bindValue(":userId", getIdByUsername($username));
             $stmt->execute();
+            $stmt->closeCursor();
 
             return true;
         }
@@ -115,6 +124,7 @@
         $stmt->bindValue(":subject", $subject);
         $stmt->bindValue(":message", $message);
         $stmt->execute();
+        $stmt->closeCursor();
 
     }
 
@@ -123,6 +133,8 @@
         $stmt = $file_db->prepare("DELETE FROM message WHERE id_message = :messageId");
         $stmt->bindValue(":messageId", $messageId);
         $stmt->execute();
+        $stmt->closeCursor();
+
     }
 
     function isActive($userId){
@@ -130,12 +142,12 @@
 
         $stmt = $file_db->prepare("SELECT enabled FROM user WHERE id_user = :userId");
         $stmt->bindValue(":userId", $userId);
-        $result = $stmt->execute();
+        $stmt->execute();
+        $result = $stmt->fetch();
+        $stmt->closeCursor();
 
-        foreach($result as $row){
-            if($row[0] == 1){
-                return true;
-            }
+        if($result['enabled'] == 1) {
+            return true;
         }
 
         return false;
@@ -146,12 +158,12 @@
 
         $stmt = $file_db->prepare("SELECT role FROM user WHERE id_user = :userId");
         $stmt->bindValue(":userId", $userId);
-        $result = $stmt->execute();
+        $stmt->execute();
+        $result = $stmt->fetch();
+        $stmt->closeCursor();
 
-        foreach($result as $row){
-            if($row[0] == 1){
-                return true;
-            }
+        if($result['role'] == 1){
+            return true;
         }
 
         return false;
