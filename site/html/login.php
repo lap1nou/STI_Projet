@@ -8,7 +8,10 @@
         // Thanks to SQLite 3, the numCount() function is not supported so we have to implement it ourself
         $numRows = 0;
 
-        $result = $file_db->query("SELECT * FROM user WHERE username = \"" . $username . "\"");
+        $stmt = $file_db->prepare("SELECT * FROM user WHERE username = :username");
+        $stmt->bindValue(":username", $username);
+
+        $result = $stmt->execute();
 
         foreach($result as $row){
             $numRows++; 
