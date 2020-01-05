@@ -1,7 +1,7 @@
 <?php
 
     if(isValid($_SESSION['username']) && isValid($_SESSION['password'])){
-        if(isValid($_POST['removeMessage'])){
+        if(isValid($_POST['removeMessage']) && verifyToken($_POST['token'])){
             removeMessage($_POST['messageId']);
         }
 
@@ -20,27 +20,29 @@
                 <div class="card-header" id="heading<?php echo $message[0] ?>">
                     <form action="?page=write.php" method="POST" style="display: inline-block;">
                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<?php echo $message[0] ?>" aria-expanded="true" aria-controls="collapse<?php echo $message[0] ?>">
-                            <?php echo $message[3] . " - by " . getUsernameById($message[1]) ?>
+                            <?php echo htmlspecialchars($message[3]) . " - by " . getUsernameById($message[1]) ?>
                         </button>
                         <input class="btn btn-success" type="submit" value="Answer" name="answerMessage">
                         <input type="hidden" value="<?php echo getUsernameById($message[1]) ?>" name="receiverMessage">
-                        <input type="hidden" value="Re: <?php echo $message[3] ?>" name="subjectMessage">    
+                        <input type="hidden" value="Re: <?php echo htmlspecialchars($message[3]); ?>" name="subjectMessage">
+                        <input type="hidden" value="<?php echo $_SESSION['token'] ?>" name="token">
                     </form>
 
                     <form action="?page=message.php" method="POST" style="display: inline-block;">
                         <input class="btn btn-danger" type="submit" value="Remove" name="removeMessage">
-                        <input type="hidden" value="<?php echo $message[0] ?>" name="messageId">   
+                        <input type="hidden" value="<?php echo htmlspecialchars($message[0]); ?>" name="messageId">
+                        <input type="hidden" value="<?php echo $_SESSION['token'] ?>" name="token">
                     </form>
 
                     <!-- Source: https://stackoverflow.com/questions/46171138/bootstrap-card-header-pull-right -->
                     <div class="float-sm-right">
-                        <?php echo $message[5] ?>
+                        <?php echo htmlspecialchars($message[5]) ?>
                     </div>
                 </div>
 
                 <div id="collapse<?php echo $message[0] ?>" class="collapse" aria-labelledby="heading<?php echo $message[0] ?>" data-parent="#accordionExample">
                     <div class="card-body">
-                        <?php echo $message[4] ?>
+                        <?php echo htmlspecialchars($message[4]); ?>
                     </div>
                 </div>
             </div>

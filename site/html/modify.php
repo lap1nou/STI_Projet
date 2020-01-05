@@ -27,6 +27,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
         </select>
         <br>
         <input type="hidden" value="<?php echo $_POST['userIdModify'] ?>" name="userIdModify">
+        <input type="hidden" value="<?php echo $_SESSION['token'] ?>" name="token">
         <input class="btn btn-success" type="submit" id="button_login" value="Modify">
     </form>
 </html>
@@ -38,7 +39,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
     $role = $_POST['role'];
     $active = $_POST['active'];
 
-    if(isValid($username)){
+    if(isValid($username) && verifyToken($_POST['token'])){
         if($password_confirm === $password){
             modifyUser($_POST['userIdModify'] ,$username, $password, $role, $active);
             ?>
@@ -64,7 +65,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
         foreach($userInfo as $row){
             ?>
             <script>
-                document.getElementById("username").value = "<?php echo $row[1] ?>";
+                document.getElementById("username").value = "<?php echo htmlspecialchars($row[1]); ?>";
                 document.getElementById("role").value = "<?php echo $row[3] ?>";
                 document.getElementById("active").value = "<?php echo $row[4] ?>";
             </script>

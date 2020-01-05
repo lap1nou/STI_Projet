@@ -5,7 +5,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
     $password_confirm = $_POST['password_confirm'];
     $role = $_POST['role'];
 
-    if(isValid($username) && isValid($password) && isValid($password_confirm)){
+    if(isValid($username) && isValid($password) && isValid($password_confirm) && verifyToken($_POST['token'])){
         // Verifying if username is valid
         if($password_confirm === $password && getIdByUsername($username) === NULL){
             createUser($username, $password, $role);
@@ -26,7 +26,7 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
             <?php
         }
     }
-    if(isValid($_POST['userIdRemove'])){
+    if(isValid($_POST['userIdRemove']) && verifyToken($_POST['token'])){
         deleteUser($_POST['userIdRemove']);
         ?>
         <br>
@@ -81,19 +81,21 @@ if(isAdmin(getIdByUsername($_SESSION['username'])) && isActive(getIdByUsername($
             <tbody>
                 <tr>
                     <th scope="row"><?php echo $user[0] ?></th>
-                        <td><?php echo $user[1] ?></td>
+                        <td><?php echo htmlspecialchars($user[1]); ?></td>
                         <td><?php echo $user[3] ?></td>
                         <td><?php echo $user[4] ?></td>
                         <td>
                             <form action="?page=modify.php" method="POST" style="display: inline-block;">
                                 <input class="btn btn-primary" type="submit" value="Modify" name="modifyUser">
                                 <input type="hidden" value="<?php echo $user[0] ?>" name="userIdModify">   
+                                <input type="hidden" value="<?php echo $_SESSION['token'] ?>" name="token">
                             </form>
                         </td>
                         <td>
                             <form action="?page=admin.php" method="POST" style="display: inline-block;">
                                 <input class="btn btn-danger" type="submit" value="Remove" name="removeUser<?php echo $user[0] ?>">
-                                <input type="hidden" value="<?php echo $user[0] ?>" name="userIdRemove">   
+                                <input type="hidden" value="<?php echo $user[0] ?>" name="userIdRemove">
+                                <input type="hidden" value="<?php echo $_SESSION['token'] ?>" name="token">
                             </form>
                         </td>
                     </tr>
